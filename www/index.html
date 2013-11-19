@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <!-- page title -->
+    <title>Apollo</title>
+    <!-- celestrium styling -->
+    <link rel="stylesheet/less" type="text/css" href="/less/celestrium-defaults.less">
+    <!-- javascript entry point -->
+    <script data-main="js/main" src="/lib/require.js"></script>
+
+    <style>
+      .valid {color: green;}
+      .invalid {color: red;}
+    </style>
+  </head>
+  <body>
+    <!-- knowledgebase configuration container -->
+    <div id="configuration">
+      <table>
+        <tr>
+          <th>Valid?</th>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td id="assertions-validity"></td>
+          <td>Assertions</td>
+          <td>
+            <textarea id="assertions-value">
+              [["a","r","b"]]
+            </textarea>
+          </td>
+        </tr>
+        <tr>
+          <td id="axes-validity"></td>
+          <td>Axes</td>
+          <td>
+            <input type="text" id="axes-value" value="[1,2]">
+          </td>
+        </tr>
+        <tr>
+          <td id="node-type-validity" class="valid">Yes</td>
+          <td>Node Type</td>
+          <td>
+            <select id="node-type-value">
+              <option value="concepts">Concepts</option>
+              <option value="assertions">Assertions</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button id="btn-visualize" disabled="true">Visualize</button>
+    </div>
+    <!-- celestrium container -->
+    <div id="celestrium"></div>
+  </body>
+</html>
