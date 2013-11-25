@@ -16,7 +16,6 @@ require ["Celestrium"], (Celestrium) ->
       @validate()
 
     validate: () ->
-      console.log "validating"
       assertionsValid = false
       try
         assertions = @getAssertions()
@@ -29,12 +28,10 @@ require ["Celestrium"], (Celestrium) ->
             throw "cell #{cell} not string" unless _.isString(cell)
         assertionsValid = true
       catch error
-        console.log error
 
       axesValid = false
       try
         axes = @getAxes()
-        console.log axes
         throw "not array" unless _.isArray(axes)
         throw "no axes" unless axes.length > 0
         _.each axes, (numAxes) ->
@@ -42,7 +39,6 @@ require ["Celestrium"], (Celestrium) ->
           throw "not integer" unless parseInt(numAxes) == numAxes
         axesValid = true
       catch error
-        console.log error
 
       @$("#assertions-validity")
         .toggleClass("valid", assertionsValid)
@@ -71,7 +67,6 @@ require ["Celestrium"], (Celestrium) ->
       nodeType = @getNodeType()
       @$el.remove()
 
-      console.log nodeType
       provider = if nodeType == "concepts" then "ConceptProvider" else "AssertionProvider"
 
       # initialize the workspace with all the below plugins
@@ -94,15 +89,15 @@ require ["Celestrium"], (Celestrium) ->
         "SelectionLayer": {}
         "NodeDetails": {}
         "LinkDistribution": {}
-        # these are plugins i defined specific to this data set
         "DimSlider":
           [Math.min.apply(null, axes), Math.max.apply(null, axes)]
-      console.log provider
+
       plugins[provider] =
         assertions: assertions
         axes: axes
       plugins["NodeSearch"] =
         prefetch: "get_nodes?hashValue=alpha"
+
       Celestrium.init plugins
 
   $ () ->
