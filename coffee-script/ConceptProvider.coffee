@@ -1,6 +1,7 @@
 # interface to uap's semantic network
 # nodes are concepts from a semantic network
 # links are the relatedness of two concepts
+localStorage.clear()
 define ["DataProvider"], (DataProvider) ->
 
   # minStrength is the minimum similarity
@@ -8,18 +9,15 @@ define ["DataProvider"], (DataProvider) ->
   # this is evaluated at the minimum dimensionality
   numNodes = 25
 
-  hash = (assertions, axes) -> "alpha"
-
   class ConceptProvider extends DataProvider
 
     constructor: (@options) ->
-      @hashValue = hash(@options.assertions, @options.axes)
       data =
-        hashValue: @hashValue
+        hashValue: @options.hash
         assertions: JSON.stringify(@options.assertions)
         axesList: JSON.stringify(@options.axes)
         nodeType: "concepts"
-      @ajax "create_kb", data
+      @ajax "create_kb", data, @options.callback
 
     init: (instances) ->
       @dimSlider = instances["DimSlider"]
@@ -27,7 +25,7 @@ define ["DataProvider"], (DataProvider) ->
 
     getLinks: (node, nodes, callback) ->
       data =
-        hashValue: @hashValue
+        hashValue: @options.hash
         node: JSON.stringify(node)
         otherNodes: JSON.stringify(nodes)
       @ajax "get_edges", data, (arrayOfCoeffs) ->
@@ -36,7 +34,7 @@ define ["DataProvider"], (DataProvider) ->
 
     getLinkedNodes: (nodes, callback) ->
       data =
-        hashValue: @hashValue
+        hashValue: @options.hash
         nodes: JSON.stringify(nodes)
         numNodes: numNodes
       @ajax "get_related_nodes", data, callback

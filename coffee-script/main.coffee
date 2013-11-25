@@ -69,6 +69,8 @@ require ["Celestrium"], (Celestrium) ->
 
       provider = if nodeType == "concepts" then "ConceptProvider" else "AssertionProvider"
 
+      hash = + new Date()
+
       # initialize the workspace with all the below plugins
       plugins =
         # these come with celestrium
@@ -92,13 +94,17 @@ require ["Celestrium"], (Celestrium) ->
         "DimSlider":
           [Math.min.apply(null, axes), Math.max.apply(null, axes)]
 
-      plugins[provider] =
-        assertions: assertions
-        axes: axes
-      plugins["NodeSearch"] =
-        prefetch: "get_nodes?hashValue=alpha"
-
-      Celestrium.init plugins
+      Celestrium.init plugins, (instances) ->
+        require [provider, "NodeSearch"], (Provider, NodeSearch) ->
+          p = new Provider
+            assertions: assertions
+            axes: axes
+            hash: hash
+            callback: () ->
+              nodeSearch = new NodeSearch
+                prefetch: "get_nodes?hashValue=#{hash}"
+              nodeSearch.init(instances)
+          p.init(instances)
 
   $ () ->
     new ConfigView
